@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 interface CatData {
   id: string;
@@ -15,7 +16,7 @@ export default function Home() {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://api.thecatapi.com/v1/images/search?limit=50",
+        "https://api.thecatapi.com/v1/images/search?limit=25",
         {
           method: "GET",
           headers: {
@@ -26,7 +27,6 @@ export default function Home() {
       );
       const catData: CatData[] = await response.json();
       setData((prevData) => [...prevData, ...catData]);
-      console.log(catData);
     } catch (error) {
       console.error("Error fetching data!", error);
     } finally {
@@ -40,7 +40,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      {!data.length && loading ? "Loading..." : ""}
+      {!data.length && loading ? <Loader /> : ""}
       <div className="mt-4 grid w-auto h-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {data.map((cat) => (
           <Link
