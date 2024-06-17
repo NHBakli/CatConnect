@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from "@/hooks/Auth"; 
+import { useAuth } from "@/hooks/Auth";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -30,7 +30,10 @@ const Navbar = () => {
                   </li>
                   {user && (
                     <li>
-                      <Link className="text-white hover:text-white/75" href="/">
+                      <Link
+                        className="text-white hover:text-white/75"
+                        href="/favorite"
+                      >
                         Favorite
                       </Link>
                     </li>

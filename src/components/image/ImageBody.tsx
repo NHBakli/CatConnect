@@ -8,11 +8,21 @@ interface CatData {
 
 type ImageBodyProps = {
   catData: CatData;
+  onFavorite: () => void;
+  isFavorite: boolean;
 };
 
-const ImageBody: React.FC<ImageBodyProps> = ({ catData }) => {
+const ImageBody: React.FC<ImageBodyProps> = ({
+  catData,
+  onFavorite,
+  isFavorite,
+}) => {
+  const handleFavoriteClick = () => {
+    onFavorite();
+  };
+
   return (
-    <div className="flex justify-center items-center mt-28">
+    <div className="flex justify-center items-center mt-10 mb-10">
       <div className="image-body bg-custom-gradient rounded-3xl shadow-lg p-6">
         <img
           src={catData.url}
@@ -23,13 +33,18 @@ const ImageBody: React.FC<ImageBodyProps> = ({ catData }) => {
           <div>
             <FaHeart
               size={24}
-              className="text-white hover:text-red-500 cursor-pointer"
+              className={`text-white cursor-pointer ${
+                isFavorite ? "text-red-500" : "hover:text-red-500"
+              }`}
             />
           </div>
           <div>
             <FaStar
               size={24}
-              className="text-white hover:text-yellow-500 cursor-pointer"
+              className={`text-white cursor-pointer ${
+                isFavorite ? "text-yellow-500" : "hover:text-yellow-500"
+              }`}
+              onClick={handleFavoriteClick}
             />
           </div>
           <div>

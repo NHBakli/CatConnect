@@ -21,7 +21,7 @@ export default function Home() {
           method: "GET",
           headers: {
             "x-api-key":
-              "live_S8NzNsPlSjriXEAGWcDHiDrYlNBOYWfQnp3KjJwtlQjWDYPi3cd26iD9MLdmQv67",
+              "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
           },
         }
       );
