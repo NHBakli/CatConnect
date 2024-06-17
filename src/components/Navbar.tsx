@@ -29,14 +29,24 @@ const Navbar = () => {
                     </Link>
                   </li>
                   {user && (
-                    <li>
-                      <Link
-                        className="text-white hover:text-white/75"
-                        href="/favorite"
-                      >
-                        Favorite
-                      </Link>
-                    </li>
+                    <>
+                      <li>
+                        <Link
+                          className="text-white hover:text-white/75"
+                          href="/favorite"
+                        >
+                          Favorite
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="text-white hover:text-white/75"
+                          href="/votes"
+                        >
+                          Votes
+                        </Link>
+                      </li>
+                    </>
                   )}
                 </ul>
               </nav>

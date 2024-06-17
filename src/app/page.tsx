@@ -12,16 +12,20 @@ export default function Home() {
   const [data, setData] = useState<CatData[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("API key is not defined");
+  }
+
   const fetchCatData = async () => {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://api.thecatapi.com/v1/images/search?limit=25",
+        "https://api.thecatapi.com/v1/images/search?limit=25&has_breeds=1",
         {
           method: "GET",
           headers: {
-            "x-api-key":
-              "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
+            "x-api-key": apiKey,
           },
         }
       );

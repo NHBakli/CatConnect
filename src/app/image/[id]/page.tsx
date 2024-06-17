@@ -9,7 +9,15 @@ import AlertNotification from "@/components/alertNotification";
 interface CatData {
   id: string;
   url: string;
-  categories: { id: number; name: string };
+  breeds?: Array<{
+    name: string;
+    temperament: string;
+    origin: string;
+    description: string;
+    wikipedia_url: string;
+    country_code: string;
+    flag_url?: string;
+  }>;
 }
 
 type AlertNotificationProps = {
@@ -36,6 +44,24 @@ const ImagePage = ({ params }: Props) => {
     return storedIsFavorite ? JSON.parse(storedIsFavorite) : false;
   });
 
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("API key is not defined");
+  }
+
+  const fetchFlagUrl = async (countryCode: string): Promise<string | null> => {
+    try {
+      const response = await fetch(
+        `https://restcountries.com/v3.1/alpha/${countryCode}`
+      );
+      const data = await response.json();
+      return data[0]?.flags?.svg || null;
+    } catch (error) {
+      console.error("Error fetching flag URL!", error);
+      return null;
+    }
+  };
+
   const fetchCatData = async () => {
     try {
       setLoading(true);
@@ -44,12 +70,18 @@ const ImagePage = ({ params }: Props) => {
         {
           method: "GET",
           headers: {
-            "x-api-key":
-              "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
+            "x-api-key": apiKey,
           },
         }
       );
       const catData: CatData = await response.json();
+
+      if (catData.breeds && catData.breeds[0]) {
+        const flagUrl = await fetchFlagUrl(catData.breeds[0].country_code);
+        catData.breeds[0].flag_url = flagUrl || undefined;
+      }
+
+      console.log(catData);
       setCatData(catData);
     } catch (error) {
       console.error("Error fetching data!", error);
@@ -65,7 +97,7 @@ const ImagePage = ({ params }: Props) => {
   const handleFavorite = async () => {
     try {
       let rawBody;
-      let favoriteId = null; 
+      let favoriteId = null;
 
       if (isFavorite) {
         const favoriteToDelete = await fetch(
@@ -73,15 +105,14 @@ const ImagePage = ({ params }: Props) => {
           {
             method: "GET",
             headers: {
-              "x-api-key":
-                "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
+              "x-api-key": apiKey,
             },
           }
         );
         const favoriteData = await favoriteToDelete.json();
 
         if (favoriteData.length > 0) {
-          favoriteId = favoriteData[0].id; 
+          favoriteId = favoriteData[0].id;
         }
 
         rawBody = JSON.stringify({ image_id: favoriteId });
@@ -99,8 +130,7 @@ const ImagePage = ({ params }: Props) => {
         {
           method: isFavorite ? "DELETE" : "POST",
           headers: {
-            "x-api-key":
-              "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
+            "x-api-key": apiKey,
             "Content-Type": "application/json",
           },
           body: rawBody,
@@ -139,6 +169,19 @@ const ImagePage = ({ params }: Props) => {
       setTimeout(() => {
         setNotification(null);
       }, 3000);
+    }
+  };
+
+  const handleUpload = async () => {
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+        },
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 

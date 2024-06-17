@@ -4,16 +4,15 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import FavoritesBody from "@/components/image/FavoritesBody";
 
-interface CatData {
-  id: string;
-  url: string;
-  categories: { id: number; name: string };
-}
-
 const favoritePage = () => {
   const auth = useAuth();
   const [catData, setCatData] = useState<[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("API key is not defined");
+  }
 
   const fetchFavorite = async () => {
     setLoading(true);
@@ -23,8 +22,7 @@ const favoritePage = () => {
         {
           headers: {
             "content-type": "application/json",
-            "x-api-key":
-              "live_oQShL3x4fwpTTRczMScjFteY3yzdXeQx3GizpAgCiPV1ZxdaL10zlS0w5fY7o1lj",
+            "x-api-key": apiKey,
           },
         }
       );
