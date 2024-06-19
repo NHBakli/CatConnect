@@ -39,6 +39,8 @@ const ImagePage = ({ params }: Props) => {
     useState<AlertNotificationProps | null>(null);
   const auth = useAuth();
 
+  const userId = auth.user?.id;
+
   const [isFavorite, setIsFavorite] = useState<boolean>(() => {
     const storedIsFavorite = localStorage.getItem(`favorite_${params.id}`);
     return storedIsFavorite ? JSON.parse(storedIsFavorite) : false;
@@ -81,7 +83,6 @@ const ImagePage = ({ params }: Props) => {
         catData.breeds[0].flag_url = flagUrl || undefined;
       }
 
-      console.log(catData);
       setCatData(catData);
     } catch (error) {
       console.error("Error fetching data!", error);
@@ -101,11 +102,12 @@ const ImagePage = ({ params }: Props) => {
 
       if (isFavorite) {
         const favoriteToDelete = await fetch(
-          `https://api.thecatapi.com/v1/favourites?image_id=${params.id}&sub_id=${auth.user?.id}`,
+          `https://api.thecatapi.com/v1/favourites?image_id=${params.id}&sub_id=${userId}`,
           {
             method: "GET",
             headers: {
               "x-api-key": apiKey,
+              "Content-Type": "application/json",
             },
           }
         );
@@ -119,7 +121,7 @@ const ImagePage = ({ params }: Props) => {
       } else {
         rawBody = JSON.stringify({
           image_id: params.id,
-          sub_id: auth.user?.id,
+          sub_id: userId,
         });
       }
 
@@ -172,16 +174,40 @@ const ImagePage = ({ params }: Props) => {
     }
   };
 
-  const handleUpload = async () => {
+  const handleVotes = async () => {
     try {
-      const response = await fetch("", {
+      let rawBody = JSON.stringify({
+        image_id: params.id,
+        sub_id: userId,
+        value: 1,
+      });
+      const response = await fetch("https://api.thecatapi.com/v1/votes", {
         method: "POST",
         headers: {
           "x-api-key": apiKey,
+          "Content-Type": "application/json",
         },
+        body: rawBody,
       });
+      if (response.ok) {
+        setNotification({
+          title: "Congratulation",
+          content: "Your vote has been taken into account.",
+          color: "text-green-500",
+        });
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+      }
     } catch (error) {
-      console.log(error);
+      setNotification({
+        title: "Error",
+        content: "Voting error for this image!",
+        color: "text-red-500",
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
@@ -203,6 +229,7 @@ const ImagePage = ({ params }: Props) => {
             catData={catData}
             onFavorite={handleFavorite}
             isFavorite={isFavorite}
+            onVotes={handleVotes}
           />
         )
       )}

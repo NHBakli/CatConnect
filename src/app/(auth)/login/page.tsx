@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const loginPage = () => {
   const [formData, setFormData] = useState<{
@@ -49,7 +50,7 @@ const loginPage = () => {
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
-            Get started today
+            Sign-In
           </h1>
 
           <form
@@ -57,8 +58,16 @@ const loginPage = () => {
             onSubmit={handleSubmit}
           >
             <p className="text-center text-lg text-white font-medium">
-              Sign in to your account
+              Log in to your account to access cat information.
             </p>
+
+            {error ? (
+              <div className="font-bold text-red-600 text-center">
+                {error}, try again later!
+              </div>
+            ) : (
+              ""
+            )}
 
             <div>
               <label htmlFor="email" className="sr-only">
@@ -146,9 +155,9 @@ const loginPage = () => {
 
             <p className="text-center text-sm text-gray-500">
               No account?
-              <a className="underline" href="/signup">
+              <Link className="underline" href="/signup">
                 Sign-up
-              </a>
+              </Link>
             </p>
           </form>
         </div>

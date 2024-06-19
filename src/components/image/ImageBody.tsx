@@ -18,15 +18,20 @@ type ImageBodyProps = {
   catData: CatData;
   onFavorite: () => void;
   isFavorite: boolean;
+  onVotes: () => void;
 };
 
 const ImageBody: React.FC<ImageBodyProps> = ({
   catData,
   onFavorite,
   isFavorite,
+  onVotes,
 }) => {
   const handleFavoriteClick = () => {
     onFavorite();
+  };
+  const handleVotes = () => {
+    onVotes();
   };
 
   const breedInfo = catData.breeds?.[0];
@@ -39,7 +44,7 @@ const ImageBody: React.FC<ImageBodyProps> = ({
           alt={`Cat ${catData.id}`}
           className="rounded-3xl w-1/2"
         />
-        {breedInfo && (
+        {breedInfo ? (
           <div className="ml-6 w-1/2 flex flex-col">
             <h2 className="text-2xl font-bold text-white">{breedInfo.name}</h2>
             <p className="text-white mt-2 flex items-center">
@@ -79,18 +84,17 @@ const ImageBody: React.FC<ImageBodyProps> = ({
                 />
               </div>
               <div>
-                <FaDownload
-                  size={24}
-                  className="text-white hover:text-blue-500 cursor-pointer"
-                />
-              </div>
-              <div>
                 <FaVoteYea
                   size={24}
                   className="text-white hover:text-green-500 cursor-pointer"
+                  onClick={handleVotes}
                 />
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="ml-6 w-1/2 flex items-center justify-center text-white">
+            No breed information available
           </div>
         )}
       </div>

@@ -28,6 +28,14 @@ const Navbar = () => {
                       Home
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      className="text-white hover:text-white/75"
+                      href="/breeds"
+                    >
+                      Breeds
+                    </Link>
+                  </li>
                   {user && (
                     <>
                       <li>
@@ -44,6 +52,14 @@ const Navbar = () => {
                           href="/votes"
                         >
                           Votes
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="text-white hover:text-white/75"
+                          href="/upload"
+                        >
+                          Upload
                         </Link>
                       </li>
                     </>
