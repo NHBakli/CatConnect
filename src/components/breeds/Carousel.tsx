@@ -6,8 +6,9 @@ type CatImage = {
   url: string;
   breeds: {
     name: string;
-    temperament: string;
+    description: string;
     wikipedia_url: string;
+    origin: string;
   }[];
 };
 
