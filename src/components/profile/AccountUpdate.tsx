@@ -26,6 +26,8 @@ const AccountUpdate: React.FC<AccountUpdateProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (loading) return; 
+
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -37,8 +39,6 @@ const AccountUpdate: React.FC<AccountUpdateProps> = ({
     } catch (error) {
       console.error("Error updating information:", error);
       setError("Failed to update information, try again later!");
-      setName(initialName);
-      setNewEmail(initialEmail);
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ const AccountUpdate: React.FC<AccountUpdateProps> = ({
         </div>
         <button
           type="submit"
-          className={` rounded-lg text-sm px-5 py-3 font-medium w-1/6 transition duration-300 ${
+          className={`rounded-lg text-sm px-5 py-3 font-medium w-1/6 transition duration-300 ${
             loading || !isModified
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"

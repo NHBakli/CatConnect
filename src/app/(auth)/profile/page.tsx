@@ -28,7 +28,6 @@ const ProfilePage = () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-
       setUserData(user);
     } catch (error) {
       console.log(error);
@@ -43,6 +42,8 @@ const ProfilePage = () => {
 
   const handleUpdateInfo = async (name: string, newEmail: string) => {
     setLoading(true);
+    setError(null);
+    setSuccessMessage(null);
     try {
       const { error } = await supabase.auth.updateUser({
         email: newEmail,
@@ -67,8 +68,11 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
+
   const handleUpdatePassword = async (newPassword: string) => {
     setLoading(true);
+    setError(null);
+    setSuccessMessage(null);
     try {
       const { error } = await supabase.auth.updateUser({
         password: newPassword,

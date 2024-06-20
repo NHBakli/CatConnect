@@ -65,10 +65,14 @@ const Navbar = () => {
                 {user ? (
                   <>
                     <Link
-                      className="rounded-md bg-customIndigo px-5 py-2.5 text-sm font-medium text-white hover:bg-hoverCustomIndigo"
+                      className="rounded-md bg-customIndigo px-1.5 py-1.5 text-sm font-medium text-white hover:bg-hoverCustomIndigo"
                       href="/profile"
                     >
-                      Profile
+                      <img
+                        src={user.user_metadata.profile_image_url}
+                        alt="avatar"
+                        className="h-auto w-8 rounded-md"
+                      />
                     </Link>
                     <Link
                       className="rounded-md bg-customBlue px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-hoverCustomBlue"

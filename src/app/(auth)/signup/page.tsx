@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import Loader from "@/components/Loader";
 import Link from "next/link";
 
 const RegisterPage = () => {
@@ -16,6 +17,7 @@ const RegisterPage = () => {
     name: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [loader, setLoader] = useState(true);
   const router = useRouter();
 
   const handleChange = (
@@ -28,6 +30,16 @@ const RegisterPage = () => {
     });
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoader(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const imageUrl = `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${formData.email}`;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,6 +50,7 @@ const RegisterPage = () => {
         options: {
           data: {
             name: formData.name,
+            profile_image_url: imageUrl,
           },
         },
       });
@@ -55,6 +68,7 @@ const RegisterPage = () => {
 
   return (
     <div>
+      {loader && <Loader />}
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">

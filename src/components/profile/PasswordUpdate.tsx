@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface PasswordUpdateProps {
   onUpdate: (newPassword: string) => Promise<void>;
@@ -17,9 +17,17 @@ const PasswordUpdate: React.FC<PasswordUpdateProps> = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  useEffect(() => {
+    setPasswordsMatch(newPassword === confirmPassword);
+    setIsModified(newPassword !== "" || confirmPassword !== "");
+  }, [newPassword, confirmPassword]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!passwordsMatch || loading) return;
+
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -40,14 +48,12 @@ const PasswordUpdate: React.FC<PasswordUpdateProps> = ({
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
-    setIsModified(true);
   };
 
   const handleConfirmPasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setConfirmPassword(e.target.value);
-    setIsModified(true);
   };
 
   return (
@@ -57,7 +63,7 @@ const PasswordUpdate: React.FC<PasswordUpdateProps> = ({
       </h2>
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
         <div className="flex flex-col">
-          {isModified && newPassword !== confirmPassword && (
+          {!passwordsMatch && isModified && (
             <p className="text-red-500 mt-2">Passwords do not match.</p>
           )}
           <label htmlFor="newPassword" className="text-white mb-2">
@@ -90,11 +96,11 @@ const PasswordUpdate: React.FC<PasswordUpdateProps> = ({
         <button
           type="submit"
           className={`rounded-lg text-sm px-5 py-3 font-medium w-1/6 transition duration-300 ${
-            loading
+            loading || !isModified || !passwordsMatch
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
           } text-white`}
-          disabled={loading}
+          disabled={loading || !isModified || !passwordsMatch}
         >
           {loading ? "Updating..." : "Update"}
         </button>

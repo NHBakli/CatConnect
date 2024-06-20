@@ -1,8 +1,10 @@
 "use client";
 import { supabase } from "@/lib/supabase";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Loader from "@/components/Loader";
+import AlertNotification from "@/components/alertNotification";
 
 const loginPage = () => {
   const [formData, setFormData] = useState<{
@@ -13,7 +15,18 @@ const loginPage = () => {
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [loader, setLoader] = useState(true);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const router = useRouter();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoader(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -47,6 +60,7 @@ const loginPage = () => {
 
   return (
     <div>
+      {loader && <Loader />}
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
           <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
