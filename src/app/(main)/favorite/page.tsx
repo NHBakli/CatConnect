@@ -43,7 +43,17 @@ const favoritePage = () => {
 
   return (
     <div>
-      {loading ? <Loader /> : catData && <FavoritesBody catData={catData} />}
+      {loading ? (
+        <Loader />
+      ) : catData && catData.length === 0 ? (
+        <div className="mt-14">
+          <h3 className="text-center font-bold text-white ">
+            No image favorites found!
+          </h3>
+        </div>
+      ) : (
+        <FavoritesBody catData={catData} />
+      )}
     </div>
   );
 };

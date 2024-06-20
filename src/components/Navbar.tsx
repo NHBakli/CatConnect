@@ -54,14 +54,6 @@ const Navbar = () => {
                           Votes
                         </Link>
                       </li>
-                      <li>
-                        <Link
-                          className="text-white hover:text-white/75"
-                          href="/upload"
-                        >
-                          Upload
-                        </Link>
-                      </li>
                     </>
                   )}
                 </ul>

@@ -9,9 +9,11 @@ const RegisterPage = () => {
   const [formData, setFormData] = useState<{
     email: string;
     password: string;
+    name: string;
   }>({
     email: "",
     password: "",
+    name: "",
   });
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -33,6 +35,11 @@ const RegisterPage = () => {
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
+        options: {
+          data: {
+            name: formData.name,
+          },
+        },
       });
 
       if (error) {
@@ -63,6 +70,42 @@ const RegisterPage = () => {
             </p>
 
             <div>
+              <label htmlFor="name" className="sr-only">
+                Name
+              </label>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm text-black"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter name"
+                  required
+                />
+
+                <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="size-4 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="email" className="sr-only">
                 Email
               </label>
@@ -76,6 +119,7 @@ const RegisterPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter email"
+                  required
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -141,13 +185,13 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white hover:bg-indigo-700"
             >
               Sign-up
             </button>
 
             <p className="text-center text-sm text-gray-500">
-              You have already account?
+              You already have an account?
               <Link className="underline" href="/login">
                 Sign-in
               </Link>

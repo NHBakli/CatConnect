@@ -24,7 +24,7 @@ const VotesPage: React.FC = () => {
   }
 
   const auth = useAuth();
-  let userId = auth.user?.id;
+  const userId = auth.user?.id;
 
   const fetchData = async () => {
     try {
@@ -43,6 +43,8 @@ const VotesPage: React.FC = () => {
 
       if (response.ok) {
         setData(data);
+      } else {
+        console.error("Error fetching data:", data);
       }
     } catch (error) {
       console.error("Error fetching data!", error);
@@ -52,28 +54,39 @@ const VotesPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
 
   return (
-    <main className="flex flex-col items-center justify-between p-24">
-      {loading && <Loader />}
-      <div className="mt-4 grid w-auto h-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {data.map((cat) => (
-          <Link href={`/image/${cat.image.id}`} key={cat.id}>
-            <div className="bg-transparent rounded-lg shadow-md overflow-hidden w-full h-full cursor-pointer">
-              <div className="w-full h-full aspect-w-1 aspect-h-1">
-                <img
-                  src={cat.image.url}
-                  alt={`Cat ${cat.id}`}
-                  className="object-cover object-center w-full h-full"
-                />
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </main>
+    <div>
+      {loading ? (
+        <Loader />
+      ) : data.length === 0 ? (
+        <div className="mt-14">
+          <h3 className="text-center font-bold text-white">No votes found!</h3>
+        </div>
+      ) : (
+        <main className="flex flex-col items-center justify-between p-24">
+          <div className="mt-4 grid w-auto h-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {data.map((cat) => (
+              <Link href={`/image/${cat.image.id}`} key={cat.id}>
+                <div className="bg-transparent rounded-lg shadow-md overflow-hidden w-full h-full cursor-pointer">
+                  <div className="w-full h-full aspect-w-1 aspect-h-1">
+                    <img
+                      src={cat.image.url}
+                      alt={`Cat ${cat.id}`}
+                      className="object-cover object-center w-full h-full"
+                    />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </main>
+      )}
+    </div>
   );
 };
 
