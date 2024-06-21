@@ -28,6 +28,7 @@ const ProfilePage = () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       setUserData(user);
     } catch (error) {
       console.log(error);
@@ -53,13 +54,14 @@ const ProfilePage = () => {
       if (error) {
         throw error;
       }
+      setSuccessMessage(
+        "Information updated successfully! Please check your new email and old email to confirm the change."
+      );
 
       setUserData((prevData) => ({
         ...prevData,
-        email: newEmail,
         user_metadata: { ...prevData?.user_metadata, name },
       }));
-      setSuccessMessage("Information updated successfully!");
     } catch (error) {
       console.error("Error updating information:", error);
       setError("Failed to update information.");
@@ -133,7 +135,7 @@ const ProfilePage = () => {
             }`}
             onClick={() => setSelectedSection("account")}
           >
-            <h2 className="text-sm">Email</h2>
+            <h2 className="text-sm">Account</h2>
           </div>
           <div
             className={`cursor-pointer rounded-lg h-12 w-32 text-center flex items-center justify-center ${

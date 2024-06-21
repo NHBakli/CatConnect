@@ -26,7 +26,7 @@ const AccountUpdate: React.FC<AccountUpdateProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (loading) return; 
+    if (loading) return;
 
     setLoading(true);
     setError(null);
@@ -34,7 +34,9 @@ const AccountUpdate: React.FC<AccountUpdateProps> = ({
 
     try {
       await onUpdate(name, newEmail);
-      setSuccessMessage("Information updated successfully!");
+      setSuccessMessage(
+        "Information updated successfully! Please check your new email and old email to confirm the change."
+      );
       setIsModified(false);
     } catch (error) {
       console.error("Error updating information:", error);
