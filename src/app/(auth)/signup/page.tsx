@@ -83,6 +83,14 @@ const RegisterPage = () => {
               Sign in to your account
             </p>
 
+            {error ? (
+              <div className="font-bold text-red-600 text-center">
+                {error}, try again later!
+              </div>
+            ) : (
+              ""
+            )}
+
             <div>
               <label htmlFor="name" className="sr-only">
                 Name
